@@ -1,0 +1,22 @@
+syntax="proto3";
+
+option go_package="./gen/pb";
+
+service AuthService {
+  rpc CreateUser(User) returns (SignUpResponse) {}
+}
+
+message User {
+  string Name = 1;
+  string Surname = 2;
+  string Username = 3;
+  string Email = 4;
+  string Phone = 5;
+  string Gender = 6;
+  string Password = 7;
+}
+
+message SignUpResponse {
+  int64 Code = 1;
+  string Message = 2;
+}
