@@ -2,8 +2,8 @@ from __future__ import print_function
 import logging
 import grpc
 
-from pb import auth_pb2 as pb
-from pb import auth_pb2_grpc as pbg
+import auth_pb2 as pb
+import auth_pb2_grpc as pbg
 
 name = "Rustam"
 surname = "Khusainov"

@@ -12,7 +12,7 @@ type Endpoint struct {
 	services *service.Service
 }
 
-func NewEnpoint(services *service.Service) *Endpoint {
+func NewEndpoint(services *service.Service) *Endpoint {
 	return &Endpoint{services: services}
 }
 
