@@ -1,4 +1,4 @@
-package enpoint
+package endpoint
 
 import (
 	"context"

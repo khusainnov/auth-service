@@ -9,7 +9,6 @@ import (
 	"github.com/khusainnov/auth-service/pkg/repository"
 	"github.com/khusainnov/auth-service/pkg/service"
 	"github.com/khusainnov/logging"
-	"github.com/sirupsen/logrus"
 )
 
 // TODO: регистрация пользователя
@@ -38,12 +37,12 @@ func main() {
 		Password: os.Getenv("PG_PASSWORD"),
 	})
 	if err != nil {
-		logrus.Errorf("Cannot run db, due to error: %s", err.Error())
+		logger.Errorf("Cannot run db, due to error: %s", err.Error())
 	}
 
 	repo := repository.NewRepository(db)
 	services := service.NewService(repo)
-	//endpoints := enpoint.NewEnpoint(services)
+	//endpoints := endpoint.NewEnpoint(services)
 
 	// Redis connect
 

@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: "auth"
+    tty: true
+    restart: on-failure
+    ports:
+      - "9090:80"
+    depends_on:
+      - auth-postgres
+    networks:
+      - tgbot
+    volumes:
+      - .:/app
+
+  auth-postgres:
+    image: postgres:latest
+    container_name: "auth-postgres"
+    ports:
+      - "5436:5432"
+    expose:
+      - "5436"
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=qwerty
+#      - POSTGRES_DB=postgres
+#      - POSTGRES_HOST=postgres-db
+    networks:
+      - tgbot
+
+networks:
+  tgbot:
+    driver: bridge

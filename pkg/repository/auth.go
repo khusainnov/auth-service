@@ -17,10 +17,9 @@ func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 }
 
 func (ap *AuthPostgres) CreateUser(u *pb.User) (int, error) {
-	if u != nil {
-		fmt.Printf("%+v\n CREATED")
-		return 1, nil
+	if u == nil {
+		return 0, errors.New(fmt.Sprintf("Cannot create, due to empty user: \n%+v\n", u))
 	}
-
-	return 0, errors.New(fmt.Sprintf("Cannot create, due to empty user: \n%+v\n", u))
+	fmt.Printf("%+v\nCREATED\n", u)
+	return 1, nil
 }

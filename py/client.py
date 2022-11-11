@@ -5,8 +5,8 @@ import grpc
 import auth_pb2 as pb
 import auth_pb2_grpc as pbg
 
-name = "Rustam"
-surname = "Khusainov"
+name = "ANy"
+surname = "Name"
 username = "khusainnov"
 email = "test@gmail.com"
 phone = "+71234567890"
@@ -16,7 +16,7 @@ u = pb.User(Name=name, Surname=surname, Username=username, Email=email, Phone=ph
 
 
 def run():
-    with grpc.insecure_channel('127.0.0.1:9090') as channel:
+    with grpc.insecure_channel('localhost:9090') as channel:
         stub = pbg.AuthServiceStub(channel)
         resp = stub.CreateUser(
             pb.User(Name=u.Name, Surname=u.Surname, Username=u.Username, Email=u.Email, Phone=u.Phone, Password=u.Password))
