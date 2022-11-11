@@ -12,8 +12,7 @@ message User {
   string Username = 3;
   string Email = 4;
   string Phone = 5;
-  string Gender = 6;
-  string Password = 7;
+  string Password = 6;
 }
 
 message SignUpResponse {

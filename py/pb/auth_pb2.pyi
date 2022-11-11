@@ -13,11 +13,9 @@ class SignUpResponse(_message.Message):
     def __init__(self, Code: _Optional[int] = ..., Message: _Optional[str] = ...) -> None: ...
 
 class User(_message.Message):
-    __slots__ = ["Email", "Gender", "Name", "Password", "Phone", "Surname", "Username"]
+    __slots__ = ["Email", "Name", "Password", "Phone", "Surname", "Username"]
     EMAIL_FIELD_NUMBER: _ClassVar[int]
     Email: str
-    GENDER_FIELD_NUMBER: _ClassVar[int]
-    Gender: str
     NAME_FIELD_NUMBER: _ClassVar[int]
     Name: str
     PASSWORD_FIELD_NUMBER: _ClassVar[int]
@@ -28,4 +26,4 @@ class User(_message.Message):
     Surname: str
     USERNAME_FIELD_NUMBER: _ClassVar[int]
     Username: str
-    def __init__(self, Name: _Optional[str] = ..., Surname: _Optional[str] = ..., Username: _Optional[str] = ..., Email: _Optional[str] = ..., Phone: _Optional[str] = ..., Gender: _Optional[str] = ..., Password: _Optional[str] = ...) -> None: ...
+    def __init__(self, Name: _Optional[str] = ..., Surname: _Optional[str] = ..., Username: _Optional[str] = ..., Email: _Optional[str] = ..., Phone: _Optional[str] = ..., Password: _Optional[str] = ...) -> None: ...

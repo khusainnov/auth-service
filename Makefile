@@ -6,13 +6,13 @@ gengo:
 
 genpy:
 	python3 -m grpc_tools.protoc -I./proto \
-	--python_out=./py/ --pyi_out=./py/ --grpc_python_out=./py/ \
+	--python_out=./py/pb/ --pyi_out=./py/pb --grpc_python_out=./py/pb \
 	./proto/auth.proto
 
 cleango:
-	rm -f ./pb/*.pb.go
+	rm -f ./py/pb/*.pb.go
 
 cleanpy:
-	rm -f ./py/*.py \
-	rm -f ./py/*.pyi
+	rm -f ./py/pb/*.py \
+	rm -f ./py/pb/*.pyi
 
