@@ -6,7 +6,9 @@ import (
 )
 
 type Auth interface {
-	CreateUser(u *pb.User) (int, error)
+	CreateUser(u *pb.User) (*pb.ResponseMsg, error)
+	GetUser(login *pb.UserRequest) (*pb.User, error)
+	UpdateUser(u *pb.User) (*pb.ResponseMsg, error)
 }
 
 type Service struct {

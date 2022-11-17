@@ -9,20 +9,24 @@ name = "ANy"
 surname = "Name"
 username = "khusainnov"
 email = "test@gmail.com"
-phone = "+71234567890"
+patronymic = "fan"
 password = "qwerty"
 
-u = pb.User(Name=name, Surname=surname, Username=username, Email=email, Phone=phone, Password=password)
 
-
-def run():
+def create_user(username, name, surname, patronymic, email, password):
     with grpc.insecure_channel('localhost:9090') as channel:
         stub = pbg.AuthServiceStub(channel)
         resp = stub.CreateUser(
-            pb.User(Name=u.Name, Surname=u.Surname, Username=u.Username, Email=u.Email, Phone=u.Phone, Password=u.Password))
+            pb.User(username=username, name=name, surname=surname, patronymic=patronymic, email=email,
+                    password=password))
     print(resp.Message)
 
 
+def handlers():
+    create_user(username, name, surname, patronymic, email, password)
+
+
 if __name__ == '__main__':
-    logging.basicConfig()
-    run()
+    # logging.basicConfig()
+    handlers()
+    create_user(username, name, surname, patronymic, email, password)

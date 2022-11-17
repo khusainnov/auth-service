@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"sync"
 
 	"github.com/khusainnov/auth-service/gen/pb"
 	"github.com/khusainnov/auth-service/pkg/service"
@@ -15,17 +16,37 @@ import (
 
 type Server struct {
 	pb.UnimplementedAuthServiceServer
+	sync.Mutex
 	srv        *service.Service
 	grpcServer *grpc.Server
 }
 
-func (s *Server) CreateUser(ctx context.Context, req *pb.User) (*pb.SignUpResponse, error) {
-	fmt.Printf("Recived: %+v\n", req)
-	id, err := s.srv.CreateUser(req)
+func (s *Server) CreateUser(ctx context.Context, req *pb.User) (*pb.ResponseMsg, error) {
+	s.Lock()
+	rspMsg, err := s.srv.CreateUser(req)
+	s.Unlock()
 	if err != nil {
-		return nil, errors.New("cannot create user")
+		return nil, errors.New(err.Error())
 	}
-	return &pb.SignUpResponse{Code: 200, Message: fmt.Sprintf("Created with id: %d\n", id)}, nil
+	return rspMsg, ctx.Err()
+}
+
+func (s *Server) GetUser(ctx context.Context, req *pb.UserRequest) (*pb.User, error) {
+	rspUser, err := s.srv.GetUser(req)
+	if err != nil {
+		return &pb.User{}, errors.New(fmt.Sprintf("cannot get user due to %v", err))
+	}
+
+	return rspUser, ctx.Err()
+}
+
+func (s *Server) UpdateUser(ctx context.Context, req *pb.User) (*pb.ResponseMsg, error) {
+	rspMsg, err := s.srv.UpdateUser(req)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("cannot update user due to error: %v", err))
+	}
+
+	return rspMsg, ctx.Err()
 }
 
 func (s *Server) RunGRPC(port string, srv *service.Service) error {

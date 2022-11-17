@@ -17,7 +17,17 @@ class AuthServiceStub(object):
         self.CreateUser = channel.unary_unary(
                 '/AuthService/CreateUser',
                 request_serializer=auth__pb2.User.SerializeToString,
-                response_deserializer=auth__pb2.SignUpResponse.FromString,
+                response_deserializer=auth__pb2.ResponseMsg.FromString,
+                )
+        self.GetUser = channel.unary_unary(
+                '/AuthService/GetUser',
+                request_serializer=auth__pb2.UserRequest.SerializeToString,
+                response_deserializer=auth__pb2.User.FromString,
+                )
+        self.UpdateUser = channel.unary_unary(
+                '/AuthService/UpdateUser',
+                request_serializer=auth__pb2.User.SerializeToString,
+                response_deserializer=auth__pb2.ResponseMsg.FromString,
                 )
 
 
@@ -30,13 +40,35 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UpdateUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'CreateUser': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateUser,
                     request_deserializer=auth__pb2.User.FromString,
-                    response_serializer=auth__pb2.SignUpResponse.SerializeToString,
+                    response_serializer=auth__pb2.ResponseMsg.SerializeToString,
+            ),
+            'GetUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUser,
+                    request_deserializer=auth__pb2.UserRequest.FromString,
+                    response_serializer=auth__pb2.User.SerializeToString,
+            ),
+            'UpdateUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateUser,
+                    request_deserializer=auth__pb2.User.FromString,
+                    response_serializer=auth__pb2.ResponseMsg.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -61,6 +93,40 @@ class AuthService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/AuthService/CreateUser',
             auth__pb2.User.SerializeToString,
-            auth__pb2.SignUpResponse.FromString,
+            auth__pb2.ResponseMsg.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService/GetUser',
+            auth__pb2.UserRequest.SerializeToString,
+            auth__pb2.User.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UpdateUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService/UpdateUser',
+            auth__pb2.User.SerializeToString,
+            auth__pb2.ResponseMsg.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\"g\n\x04User\x12\x0c\n\x04Name\x18\x01 \x01(\t\x12\x0f\n\x07Surname\x18\x02 \x01(\t\x12\x10\n\x08Username\x18\x03 \x01(\t\x12\r\n\x05\x45mail\x18\x04 \x01(\t\x12\r\n\x05Phone\x18\x05 \x01(\t\x12\x10\n\x08Password\x18\x06 \x01(\t\"/\n\x0eSignUpResponse\x12\x0c\n\x04\x43ode\x18\x01 \x01(\x03\x12\x0f\n\x07Message\x18\x02 \x01(\t25\n\x0b\x41uthService\x12&\n\nCreateUser\x12\x05.User\x1a\x0f.SignUpResponse\"\x00\x42\nZ\x08./gen/pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\"l\n\x04User\x12\x10\n\x08Username\x18\x01 \x01(\t\x12\x0c\n\x04Name\x18\x02 \x01(\t\x12\x0f\n\x07Surname\x18\x03 \x01(\t\x12\x12\n\nPatronymic\x18\x04 \x01(\t\x12\r\n\x05\x45mail\x18\x05 \x01(\t\x12\x10\n\x08Password\x18\x06 \x01(\t\"1\n\x0bUserRequest\x12\x10\n\x08Username\x18\x01 \x01(\t\x12\x10\n\x08Password\x18\x02 \x01(\t\",\n\x0bResponseMsg\x12\x0c\n\x04\x43ode\x18\x01 \x01(\x03\x12\x0f\n\x07Message\x18\x02 \x01(\t2y\n\x0b\x41uthService\x12#\n\nCreateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x12 \n\x07GetUser\x12\x0c.UserRequest\x1a\x05.User\"\x00\x12#\n\nUpdateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x42\nZ\x08./gen/pbb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'auth_pb2', globals())
@@ -22,9 +22,11 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'Z\010./gen/pb'
   _USER._serialized_start=14
-  _USER._serialized_end=117
-  _SIGNUPRESPONSE._serialized_start=119
-  _SIGNUPRESPONSE._serialized_end=166
-  _AUTHSERVICE._serialized_start=168
-  _AUTHSERVICE._serialized_end=221
+  _USER._serialized_end=122
+  _USERREQUEST._serialized_start=124
+  _USERREQUEST._serialized_end=173
+  _RESPONSEMSG._serialized_start=175
+  _RESPONSEMSG._serialized_end=219
+  _AUTHSERVICE._serialized_start=221
+  _AUTHSERVICE._serialized_end=342
 # @@protoc_insertion_point(module_scope)
