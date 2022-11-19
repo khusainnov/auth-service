@@ -18,12 +18,21 @@ cleanpy:
 
 m-up:
 	migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5435/postgres?sslmode=disable' up
+
 m-down:
 	migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5435/postgres?sslmode=disable' down
+
 d-up:
 	docker run --name=gauth -e POSTGRES_PASSWORD='qwerty' -p 5435:5432 -d --rm postgres
-d-exec:
+	docker run --name=redis-hack -p 6379:6379 -d --rm redis
+
+p-exec:
 	docker exec -it gauth /bin/bash
+
+r-exec:
+	docker exec -it redis-hack /bin/bash
+
 d-stop:
 	docker stop gauth
+	docker stop redis-hack
 

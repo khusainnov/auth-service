@@ -7,7 +7,7 @@ import (
 
 type Auth interface {
 	CreateUser(u *pb.User) (*pb.ResponseMsg, error)
-	GetUser(login *pb.UserRequest) (*pb.User, error)
+	GetUser(login *pb.UserRequest) (*pb.ResponseToken, error)
 	UpdateUser(u *pb.User) (*pb.ResponseMsg, error)
 }
 

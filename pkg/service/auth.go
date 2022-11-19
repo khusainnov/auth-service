@@ -43,11 +43,33 @@ func (as *AuthService) CreateUser(u *pb.User) (*pb.ResponseMsg, error) {
 		return &pb.ResponseMsg{Code: int64(codes.Internal), Message: "Cannot get username"}, errors.New(fmt.Sprintf("error due creating token: %s\n", err.Error()))
 	}
 
+	if err = sendMail(token, u.Email); err != nil {
+		return nil, errors.New(fmt.Sprintf("cannot send email due to %+v", err))
+	}
+
 	return &pb.ResponseMsg{Code: int64(codes.OK), Message: token}, nil
 }
 
-func (as *AuthService) GetUser(login *pb.UserRequest) (*pb.User, error) {
-	return nil, nil
+// TODO: add role table
+// TODO: add permissions by role
+
+// TODO: get user and send token to client
+// TODO: update user, before update check token
+// TODO: add reset password
+
+func (as *AuthService) GetUser(login *pb.UserRequest) (*pb.ResponseToken, error) {
+	login.Password = generatePasswordHash(login.Password)
+	user, err := as.repo.GetUser(login)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := GenerateToken(user.Username)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("error due creating token: %s\n", err.Error()))
+	}
+
+	return &pb.ResponseToken{Token: token}, nil
 }
 func (as *AuthService) UpdateUser(u *pb.User) (*pb.ResponseMsg, error) {
 	u.Password = generatePasswordHash(u.GetPassword())

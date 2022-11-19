@@ -29,3 +29,17 @@ func GenerateToken(username string) (string, error) {
 
 	return token.SignedString([]byte(tokenSalt))
 }
+
+// +447539009672
+func validateToken(token string) (bool, string) {
+	t, err := jwt.ParseWithClaims(token, &tokenClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("TOKEN_SALT")), nil
+	})
+
+	if err != nil {
+		return false, ""
+	}
+
+	claims := t.Claims.(*tokenClaims)
+	return t.Valid, claims.Username
+}

@@ -23,8 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseMsg, error)
-	GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*User, error)
+	GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseToken, error)
 	UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseMsg, error)
+	ResetPassword(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseMsg, error)
 }
 
 type authServiceClient struct {
@@ -44,8 +45,8 @@ func (c *authServiceClient) CreateUser(ctx context.Context, in *User, opts ...gr
 	return out, nil
 }
 
-func (c *authServiceClient) GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
+func (c *authServiceClient) GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseToken, error) {
+	out := new(ResponseToken)
 	err := c.cc.Invoke(ctx, "/AuthService/GetUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,13 +63,23 @@ func (c *authServiceClient) UpdateUser(ctx context.Context, in *User, opts ...gr
 	return out, nil
 }
 
+func (c *authServiceClient) ResetPassword(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseMsg, error) {
+	out := new(ResponseMsg)
+	err := c.cc.Invoke(ctx, "/AuthService/ResetPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
 	CreateUser(context.Context, *User) (*ResponseMsg, error)
-	GetUser(context.Context, *UserRequest) (*User, error)
+	GetUser(context.Context, *UserRequest) (*ResponseToken, error)
 	UpdateUser(context.Context, *User) (*ResponseMsg, error)
+	ResetPassword(context.Context, *UserRequest) (*ResponseMsg, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -79,11 +90,14 @@ type UnimplementedAuthServiceServer struct {
 func (UnimplementedAuthServiceServer) CreateUser(context.Context, *User) (*ResponseMsg, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedAuthServiceServer) GetUser(context.Context, *UserRequest) (*User, error) {
+func (UnimplementedAuthServiceServer) GetUser(context.Context, *UserRequest) (*ResponseToken, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedAuthServiceServer) UpdateUser(context.Context, *User) (*ResponseMsg, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
+}
+func (UnimplementedAuthServiceServer) ResetPassword(context.Context, *UserRequest) (*ResponseMsg, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetPassword not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -152,6 +166,24 @@ func _AuthService_UpdateUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_ResetPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ResetPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/AuthService/ResetPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ResetPassword(ctx, req.(*UserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUser",
 			Handler:    _AuthService_UpdateUser_Handler,
+		},
+		{
+			MethodName: "ResetPassword",
+			Handler:    _AuthService_ResetPassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

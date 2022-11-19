@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/go-redis/redis/v9"
 	"github.com/jmoiron/sqlx"
 	"github.com/khusainnov/auth-service/gen/pb"
 )
@@ -15,7 +16,7 @@ type Repository struct {
 	Auth
 }
 
-func NewRepository(db *sqlx.DB) *Repository {
+func NewRepository(db *sqlx.DB, rdb *redis.Client) *Repository {
 	return &Repository{
 		Auth: NewAuthPostgres(db),
 	}
