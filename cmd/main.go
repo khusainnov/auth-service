@@ -63,10 +63,11 @@ func main() {
 	repo := repository.NewRepository(db, rdb)
 	services := service.NewService(repo)
 	authService := endpoint.NewAuthService(services)
+	workService := endpoint.NewWorkService(services)
 
 	//starting grpc server
 	logger.Infof("Starting server on port: %s", os.Getenv("PORT"))
-	if err = as.RunGRPC(os.Getenv("PORT"), authService); err != nil {
+	if err = as.RunGRPC(os.Getenv("PORT"), authService, workService); err != nil {
 		logger.Errorf("Error due start the server: %s", err.Error())
 	}
 }

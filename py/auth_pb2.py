@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\"l\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07surname\x18\x03 \x01(\t\x12\x12\n\npatronymic\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x10\n\x08password\x18\x06 \x01(\t\"1\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\",\n\x0bResponseMsg\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t2y\n\x0b\x41uthService\x12#\n\nCreateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x12 \n\x07GetUser\x12\x0c.UserRequest\x1a\x05.User\"\x00\x12#\n\nUpdateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x42\nZ\x08./gen/pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\"l\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07surname\x18\x03 \x01(\t\x12\x12\n\npatronymic\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x10\n\x08password\x18\x06 \x01(\t\"1\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1e\n\rResponseToken\x12\r\n\x05token\x18\x01 \x01(\t\",\n\x0bResponseMsg\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\"*\n\x08UserWork\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04\x66ile\x18\x02 \x01(\x0c\"*\n\x0cResponseWork\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x0c\n\x04\x66ile\x18\x02 \x01(\x0c\"\x1f\n\x0bResponseDoc\x12\x10\n\x08\x64ocument\x18\x01 \x01(\x0c\x32\xb1\x01\n\x0b\x41uthService\x12#\n\nCreateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x12)\n\x07GetUser\x12\x0c.UserRequest\x1a\x0e.ResponseToken\"\x00\x12#\n\nUpdateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x12-\n\rResetPassword\x12\x0c.UserRequest\x1a\x0c.ResponseMsg\"\x00\x32\x37\n\x0bWorkService\x12(\n\nCreateFile\x12\t.UserWork\x1a\r.ResponseWork\"\x00\x32\x37\n\x0f\x44ocumentService\x12$\n\x0bGenerateDoc\x12\x05.User\x1a\x0c.ResponseDoc\"\x00\x42\nZ\x08./gen/pbb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'auth_pb2', globals())
@@ -25,8 +25,20 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _USER._serialized_end=122
   _USERREQUEST._serialized_start=124
   _USERREQUEST._serialized_end=173
-  _RESPONSEMSG._serialized_start=175
-  _RESPONSEMSG._serialized_end=219
-  _AUTHSERVICE._serialized_start=221
-  _AUTHSERVICE._serialized_end=342
+  _RESPONSETOKEN._serialized_start=175
+  _RESPONSETOKEN._serialized_end=205
+  _RESPONSEMSG._serialized_start=207
+  _RESPONSEMSG._serialized_end=251
+  _USERWORK._serialized_start=253
+  _USERWORK._serialized_end=295
+  _RESPONSEWORK._serialized_start=297
+  _RESPONSEWORK._serialized_end=339
+  _RESPONSEDOC._serialized_start=341
+  _RESPONSEDOC._serialized_end=372
+  _AUTHSERVICE._serialized_start=375
+  _AUTHSERVICE._serialized_end=552
+  _WORKSERVICE._serialized_start=554
+  _WORKSERVICE._serialized_end=609
+  _DOCUMENTSERVICE._serialized_start=611
+  _DOCUMENTSERVICE._serialized_end=666
 # @@protoc_insertion_point(module_scope)

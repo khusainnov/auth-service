@@ -11,12 +11,18 @@ type Auth interface {
 	UpdateUser(u *pb.User) (*pb.ResponseMsg, error)
 }
 
+type Work interface {
+	CreateFile(file *pb.UserWork) (*pb.ResponseWork, error)
+}
+
 type Service struct {
 	Auth
+	Work
 }
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Auth: NewAuthService(repo),
+		Work: NewWorkService(repo),
 	}
 }

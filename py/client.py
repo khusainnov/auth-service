@@ -8,7 +8,7 @@ import auth_pb2_grpc as pbg
 name = "ANy"
 surname = "Name"
 username = "russosafd"
-email = "test21@gmail.com"
+email = "super.river218@mail.ru"
 patronymic = "fan"
 password = "qwerty"
 

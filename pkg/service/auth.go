@@ -59,12 +59,12 @@ func (as *AuthService) CreateUser(u *pb.User) (*pb.ResponseMsg, error) {
 
 func (as *AuthService) GetUser(login *pb.UserRequest) (*pb.ResponseToken, error) {
 	login.Password = generatePasswordHash(login.Password)
-	user, err := as.repo.GetUser(login)
+	username, err := as.repo.GetUser(login)
 	if err != nil {
 		return nil, err
 	}
 
-	token, err := GenerateToken(user.Username)
+	token, err := GenerateToken(username)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("error due creating token: %s\n", err.Error()))
 	}

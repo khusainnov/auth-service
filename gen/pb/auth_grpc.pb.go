@@ -211,3 +211,175 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "auth.proto",
 }
+
+// WorkServiceClient is the client API for WorkService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type WorkServiceClient interface {
+	CreateFile(ctx context.Context, in *UserWork, opts ...grpc.CallOption) (*ResponseWork, error)
+}
+
+type workServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewWorkServiceClient(cc grpc.ClientConnInterface) WorkServiceClient {
+	return &workServiceClient{cc}
+}
+
+func (c *workServiceClient) CreateFile(ctx context.Context, in *UserWork, opts ...grpc.CallOption) (*ResponseWork, error) {
+	out := new(ResponseWork)
+	err := c.cc.Invoke(ctx, "/WorkService/CreateFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// WorkServiceServer is the server API for WorkService service.
+// All implementations must embed UnimplementedWorkServiceServer
+// for forward compatibility
+type WorkServiceServer interface {
+	CreateFile(context.Context, *UserWork) (*ResponseWork, error)
+	mustEmbedUnimplementedWorkServiceServer()
+}
+
+// UnimplementedWorkServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedWorkServiceServer struct {
+}
+
+func (UnimplementedWorkServiceServer) CreateFile(context.Context, *UserWork) (*ResponseWork, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFile not implemented")
+}
+func (UnimplementedWorkServiceServer) mustEmbedUnimplementedWorkServiceServer() {}
+
+// UnsafeWorkServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to WorkServiceServer will
+// result in compilation errors.
+type UnsafeWorkServiceServer interface {
+	mustEmbedUnimplementedWorkServiceServer()
+}
+
+func RegisterWorkServiceServer(s grpc.ServiceRegistrar, srv WorkServiceServer) {
+	s.RegisterService(&WorkService_ServiceDesc, srv)
+}
+
+func _WorkService_CreateFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserWork)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).CreateFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/WorkService/CreateFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).CreateFile(ctx, req.(*UserWork))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// WorkService_ServiceDesc is the grpc.ServiceDesc for WorkService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var WorkService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "WorkService",
+	HandlerType: (*WorkServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateFile",
+			Handler:    _WorkService_CreateFile_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "auth.proto",
+}
+
+// DocumentServiceClient is the client API for DocumentService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type DocumentServiceClient interface {
+	GenerateDoc(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseDoc, error)
+}
+
+type documentServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewDocumentServiceClient(cc grpc.ClientConnInterface) DocumentServiceClient {
+	return &documentServiceClient{cc}
+}
+
+func (c *documentServiceClient) GenerateDoc(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseDoc, error) {
+	out := new(ResponseDoc)
+	err := c.cc.Invoke(ctx, "/DocumentService/GenerateDoc", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// DocumentServiceServer is the server API for DocumentService service.
+// All implementations must embed UnimplementedDocumentServiceServer
+// for forward compatibility
+type DocumentServiceServer interface {
+	GenerateDoc(context.Context, *User) (*ResponseDoc, error)
+	mustEmbedUnimplementedDocumentServiceServer()
+}
+
+// UnimplementedDocumentServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedDocumentServiceServer struct {
+}
+
+func (UnimplementedDocumentServiceServer) GenerateDoc(context.Context, *User) (*ResponseDoc, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateDoc not implemented")
+}
+func (UnimplementedDocumentServiceServer) mustEmbedUnimplementedDocumentServiceServer() {}
+
+// UnsafeDocumentServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DocumentServiceServer will
+// result in compilation errors.
+type UnsafeDocumentServiceServer interface {
+	mustEmbedUnimplementedDocumentServiceServer()
+}
+
+func RegisterDocumentServiceServer(s grpc.ServiceRegistrar, srv DocumentServiceServer) {
+	s.RegisterService(&DocumentService_ServiceDesc, srv)
+}
+
+func _DocumentService_GenerateDoc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DocumentServiceServer).GenerateDoc(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/DocumentService/GenerateDoc",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DocumentServiceServer).GenerateDoc(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// DocumentService_ServiceDesc is the grpc.ServiceDesc for DocumentService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var DocumentService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "DocumentService",
+	HandlerType: (*DocumentServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GenerateDoc",
+			Handler:    _DocumentService_GenerateDoc_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "auth.proto",
+}
