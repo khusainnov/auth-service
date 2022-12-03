@@ -8,7 +8,7 @@ import auth_pb2_grpc as pbg
 name = "ANy"
 surname = "Name"
 username = "russosafd"
-email = "test21@gmail.com"
+email = "super.river218@mail.ru"
 patronymic = "fan"
 password = "qwerty"
 
@@ -19,12 +19,17 @@ def create_user(Username, Name, Surname, Patronymic, Email, Password):
         resp = stub.CreateUser(pb.User(username=Username, name=Name, surname=Surname, patronymic=Patronymic, email=Email, password=Password))
     print(resp.message)
 
+def create_file(Username, File):
+    with grpc.insecure_channel('localhost:9090') as channel:
+        stub = pbg.WorkServiceStub(channel)
+        resp = stub.CreateFile(pb.UserWork(username=Username, file=File))
+    print(resp.message)
 
-def handlers():
-    create_user(username, name, surname, patronymic, email, password)
-
-
-if __name__ == '__main__':
-    # logging.basicConfig()
-    handlers()
-    create_user(username, name, surname, patronymic, email, password)
+# def handlers():
+#     create_user(username, name, surname, patronymic, email, password)
+#
+#
+# if __name__ == '__main__':
+#     # logging.basicConfig()
+#     handlers()
+#     create_user(username, name, surname, patronymic, email, password)

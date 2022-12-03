@@ -22,12 +22,22 @@ class AuthServiceStub(object):
         self.GetUser = channel.unary_unary(
                 '/AuthService/GetUser',
                 request_serializer=auth__pb2.UserRequest.SerializeToString,
-                response_deserializer=auth__pb2.User.FromString,
+                response_deserializer=auth__pb2.ResponseAuth.FromString,
                 )
         self.UpdateUser = channel.unary_unary(
                 '/AuthService/UpdateUser',
                 request_serializer=auth__pb2.User.SerializeToString,
                 response_deserializer=auth__pb2.ResponseMsg.FromString,
+                )
+        self.ResetPassword = channel.unary_unary(
+                '/AuthService/ResetPassword',
+                request_serializer=auth__pb2.UserRequest.SerializeToString,
+                response_deserializer=auth__pb2.ResponseMsg.FromString,
+                )
+        self.DeleteUser = channel.unary_unary(
+                '/AuthService/DeleteUser',
+                request_serializer=auth__pb2.DeleteRequest.SerializeToString,
+                response_deserializer=auth__pb2.DeleteResponse.FromString,
                 )
 
 
@@ -52,6 +62,18 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ResetPassword(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -63,12 +85,22 @@ def add_AuthServiceServicer_to_server(servicer, server):
             'GetUser': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUser,
                     request_deserializer=auth__pb2.UserRequest.FromString,
-                    response_serializer=auth__pb2.User.SerializeToString,
+                    response_serializer=auth__pb2.ResponseAuth.SerializeToString,
             ),
             'UpdateUser': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateUser,
                     request_deserializer=auth__pb2.User.FromString,
                     response_serializer=auth__pb2.ResponseMsg.SerializeToString,
+            ),
+            'ResetPassword': grpc.unary_unary_rpc_method_handler(
+                    servicer.ResetPassword,
+                    request_deserializer=auth__pb2.UserRequest.FromString,
+                    response_serializer=auth__pb2.ResponseMsg.SerializeToString,
+            ),
+            'DeleteUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteUser,
+                    request_deserializer=auth__pb2.DeleteRequest.FromString,
+                    response_serializer=auth__pb2.DeleteResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -110,7 +142,7 @@ class AuthService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/AuthService/GetUser',
             auth__pb2.UserRequest.SerializeToString,
-            auth__pb2.User.FromString,
+            auth__pb2.ResponseAuth.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -128,5 +160,260 @@ class AuthService(object):
         return grpc.experimental.unary_unary(request, target, '/AuthService/UpdateUser',
             auth__pb2.User.SerializeToString,
             auth__pb2.ResponseMsg.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ResetPassword(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService/ResetPassword',
+            auth__pb2.UserRequest.SerializeToString,
+            auth__pb2.ResponseMsg.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/AuthService/DeleteUser',
+            auth__pb2.DeleteRequest.SerializeToString,
+            auth__pb2.DeleteResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+
+class FileServiceStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.CreateFile = channel.unary_unary(
+                '/FileService/CreateFile',
+                request_serializer=auth__pb2.UserFile.SerializeToString,
+                response_deserializer=auth__pb2.CreateFileResponse.FromString,
+                )
+        self.GetAllFiles = channel.unary_unary(
+                '/FileService/GetAllFiles',
+                request_serializer=auth__pb2.FileRequest.SerializeToString,
+                response_deserializer=auth__pb2.ResponseFile.FromString,
+                )
+        self.GetFile = channel.unary_unary(
+                '/FileService/GetFile',
+                request_serializer=auth__pb2.FileRequest.SerializeToString,
+                response_deserializer=auth__pb2.ResponseFile.FromString,
+                )
+        self.GenerateFile = channel.unary_unary(
+                '/FileService/GenerateFile',
+                request_serializer=auth__pb2.FileRequest.SerializeToString,
+                response_deserializer=auth__pb2.ResponseName.FromString,
+                )
+
+
+class FileServiceServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def CreateFile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetAllFiles(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetFile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GenerateFile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_FileServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'CreateFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreateFile,
+                    request_deserializer=auth__pb2.UserFile.FromString,
+                    response_serializer=auth__pb2.CreateFileResponse.SerializeToString,
+            ),
+            'GetAllFiles': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetAllFiles,
+                    request_deserializer=auth__pb2.FileRequest.FromString,
+                    response_serializer=auth__pb2.ResponseFile.SerializeToString,
+            ),
+            'GetFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetFile,
+                    request_deserializer=auth__pb2.FileRequest.FromString,
+                    response_serializer=auth__pb2.ResponseFile.SerializeToString,
+            ),
+            'GenerateFile': grpc.unary_unary_rpc_method_handler(
+                    servicer.GenerateFile,
+                    request_deserializer=auth__pb2.FileRequest.FromString,
+                    response_serializer=auth__pb2.ResponseName.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'FileService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+ # This class is part of an EXPERIMENTAL API.
+class FileService(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def CreateFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/FileService/CreateFile',
+            auth__pb2.UserFile.SerializeToString,
+            auth__pb2.CreateFileResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetAllFiles(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/FileService/GetAllFiles',
+            auth__pb2.FileRequest.SerializeToString,
+            auth__pb2.ResponseFile.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/FileService/GetFile',
+            auth__pb2.FileRequest.SerializeToString,
+            auth__pb2.ResponseFile.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GenerateFile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/FileService/GenerateFile',
+            auth__pb2.FileRequest.SerializeToString,
+            auth__pb2.ResponseName.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+
+class StatServiceStub(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.GetStatistics = channel.unary_unary(
+                '/StatService/GetStatistics',
+                request_serializer=auth__pb2.StatisticsRequest.SerializeToString,
+                response_deserializer=auth__pb2.StatisticsResponse.FromString,
+                )
+
+
+class StatServiceServicer(object):
+    """Missing associated documentation comment in .proto file."""
+
+    def GetStatistics(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_StatServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'GetStatistics': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetStatistics,
+                    request_deserializer=auth__pb2.StatisticsRequest.FromString,
+                    response_serializer=auth__pb2.StatisticsResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'StatService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+ # This class is part of an EXPERIMENTAL API.
+class StatService(object):
+    """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def GetStatistics(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/StatService/GetStatistics',
+            auth__pb2.StatisticsRequest.SerializeToString,
+            auth__pb2.StatisticsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

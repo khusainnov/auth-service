@@ -2,3 +2,6 @@
 venv
 logs
 config/.env
+pkg/.DB_Store
+py/.DS_Store
+.DS_Store

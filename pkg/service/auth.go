@@ -8,6 +8,7 @@ import (
 
 	"github.com/khusainnov/auth-service/gen/pb"
 	"github.com/khusainnov/auth-service/pkg/repository"
+	"github.com/khusainnov/logging"
 	"google.golang.org/grpc/codes"
 )
 
@@ -17,6 +18,7 @@ type AuthService struct {
 
 var (
 	signingKey = os.Getenv("SIGNING_KEY")
+	logger     = logging.GetLogger()
 )
 
 func NewAuthService(repo repository.Auth) *AuthService {
@@ -38,42 +40,86 @@ func (as *AuthService) CreateUser(u *pb.User) (*pb.ResponseMsg, error) {
 		return &pb.ResponseMsg{Code: int64(codes.AlreadyExists), Message: "Cannot get username"}, err
 	}
 
-	token, err := GenerateToken(username)
-	if err != nil {
-		return &pb.ResponseMsg{Code: int64(codes.Internal), Message: "Cannot get username"}, errors.New(fmt.Sprintf("error due creating token: %s\n", err.Error()))
-	}
-
-	if err = sendMail(token, u.Email); err != nil {
+	if err = sendGreetingMail(username, u.Email); err != nil {
 		return nil, errors.New(fmt.Sprintf("cannot send email due to %+v", err))
 	}
 
-	return &pb.ResponseMsg{Code: int64(codes.OK), Message: token}, nil
+	return &pb.ResponseMsg{Code: int64(codes.OK), Message: username}, nil
 }
 
-// TODO: add role table
-// TODO: add permissions by role
-
-// TODO: get user and send token to client
-// TODO: update user, before update check token
 // TODO: add reset password
 
-func (as *AuthService) GetUser(login *pb.UserRequest) (*pb.ResponseToken, error) {
+func (as *AuthService) GetUser(login *pb.UserRequest) (*pb.ResponseAuth, error) {
 	login.Password = generatePasswordHash(login.Password)
-	user, err := as.repo.GetUser(login)
+	roleName, err := as.repo.GetUser(login)
 	if err != nil {
 		return nil, err
 	}
 
-	token, err := GenerateToken(user.Username)
-	if err != nil {
-		return nil, errors.New(fmt.Sprintf("error due creating token: %s\n", err.Error()))
-	}
-
-	return &pb.ResponseToken{Token: token}, nil
+	return &pb.ResponseAuth{RoleName: roleName}, nil
 }
+
 func (as *AuthService) UpdateUser(u *pb.User) (*pb.ResponseMsg, error) {
 	u.Password = generatePasswordHash(u.GetPassword())
-	return nil, nil
+	msg, err := as.repo.UpdateUser(u)
+	if err != nil {
+		return &pb.ResponseMsg{
+			Code:    int64(codes.Internal),
+			Message: err.Error(),
+		}, err
+	}
+
+	rspMsg := &pb.ResponseMsg{
+		Code:    int64(codes.OK),
+		Message: msg,
+	}
+
+	return rspMsg, nil
+}
+
+func (as *AuthService) DeleteUser(u *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+	msg, err := as.repo.DeleteUser(u.GetUsername())
+	if err != nil {
+		return &pb.DeleteResponse{
+			Status:  int64(codes.Internal),
+			Message: "cannot delete user due to error | " + msg,
+		}, err
+	}
+
+	rsp := &pb.DeleteResponse{
+		Status:  int64(codes.OK),
+		Message: "deleted successfully",
+	}
+
+	return rsp, nil
+}
+
+func (as *AuthService) ResetPassword(u *pb.UserRequest) (*pb.ResponseMsg, error) {
+	pass := u.Password
+	u.Password = generatePasswordHash(u.GetPassword())
+	fmt.Printf("%+v\n\n", u)
+	email, err := as.repo.ResetPassword(u.Username, u.Password)
+	if err != nil {
+		return &pb.ResponseMsg{
+			Code:    int64(codes.Canceled),
+			Message: err.Error(),
+		}, err
+	}
+	logger.Infof("%+v", email)
+
+	if err = sendResetPasswordMail(u.Username, email, pass); err != nil {
+		return &pb.ResponseMsg{
+			Code:    int64(codes.Internal),
+			Message: err.Error(),
+		}, err
+	}
+
+	rsp := &pb.ResponseMsg{
+		Code:    int64(codes.OK),
+		Message: "UPDATED",
+	}
+
+	return rsp, nil
 }
 
 func generatePasswordHash(password string) string {

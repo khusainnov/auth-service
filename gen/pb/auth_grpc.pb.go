@@ -23,9 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
 	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseMsg, error)
-	GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseToken, error)
+	GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseAuth, error)
 	UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*ResponseMsg, error)
 	ResetPassword(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseMsg, error)
+	DeleteUser(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 }
 
 type authServiceClient struct {
@@ -45,8 +46,8 @@ func (c *authServiceClient) CreateUser(ctx context.Context, in *User, opts ...gr
 	return out, nil
 }
 
-func (c *authServiceClient) GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseToken, error) {
-	out := new(ResponseToken)
+func (c *authServiceClient) GetUser(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*ResponseAuth, error) {
+	out := new(ResponseAuth)
 	err := c.cc.Invoke(ctx, "/AuthService/GetUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -72,14 +73,24 @@ func (c *authServiceClient) ResetPassword(ctx context.Context, in *UserRequest, 
 	return out, nil
 }
 
+func (c *authServiceClient) DeleteUser(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, "/AuthService/DeleteUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthServiceServer is the server API for AuthService service.
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
 	CreateUser(context.Context, *User) (*ResponseMsg, error)
-	GetUser(context.Context, *UserRequest) (*ResponseToken, error)
+	GetUser(context.Context, *UserRequest) (*ResponseAuth, error)
 	UpdateUser(context.Context, *User) (*ResponseMsg, error)
 	ResetPassword(context.Context, *UserRequest) (*ResponseMsg, error)
+	DeleteUser(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -90,7 +101,7 @@ type UnimplementedAuthServiceServer struct {
 func (UnimplementedAuthServiceServer) CreateUser(context.Context, *User) (*ResponseMsg, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedAuthServiceServer) GetUser(context.Context, *UserRequest) (*ResponseToken, error) {
+func (UnimplementedAuthServiceServer) GetUser(context.Context, *UserRequest) (*ResponseAuth, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedAuthServiceServer) UpdateUser(context.Context, *User) (*ResponseMsg, error) {
@@ -98,6 +109,9 @@ func (UnimplementedAuthServiceServer) UpdateUser(context.Context, *User) (*Respo
 }
 func (UnimplementedAuthServiceServer) ResetPassword(context.Context, *UserRequest) (*ResponseMsg, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResetPassword not implemented")
+}
+func (UnimplementedAuthServiceServer) DeleteUser(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -184,6 +198,24 @@ func _AuthService_ResetPassword_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).DeleteUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/AuthService/DeleteUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).DeleteUser(ctx, req.(*DeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,290 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResetPassword",
 			Handler:    _AuthService_ResetPassword_Handler,
+		},
+		{
+			MethodName: "DeleteUser",
+			Handler:    _AuthService_DeleteUser_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "auth.proto",
+}
+
+// FileServiceClient is the client API for FileService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type FileServiceClient interface {
+	CreateFile(ctx context.Context, in *UserFile, opts ...grpc.CallOption) (*CreateFileResponse, error)
+	GetAllFiles(ctx context.Context, in *FileRequest, opts ...grpc.CallOption) (*ResponseFile, error)
+	GetFile(ctx context.Context, in *FileRequest, opts ...grpc.CallOption) (*ResponseFile, error)
+	GenerateFile(ctx context.Context, in *FileRequest, opts ...grpc.CallOption) (*ResponseName, error)
+}
+
+type fileServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewFileServiceClient(cc grpc.ClientConnInterface) FileServiceClient {
+	return &fileServiceClient{cc}
+}
+
+func (c *fileServiceClient) CreateFile(ctx context.Context, in *UserFile, opts ...grpc.CallOption) (*CreateFileResponse, error) {
+	out := new(CreateFileResponse)
+	err := c.cc.Invoke(ctx, "/FileService/CreateFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileServiceClient) GetAllFiles(ctx context.Context, in *FileRequest, opts ...grpc.CallOption) (*ResponseFile, error) {
+	out := new(ResponseFile)
+	err := c.cc.Invoke(ctx, "/FileService/GetAllFiles", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileServiceClient) GetFile(ctx context.Context, in *FileRequest, opts ...grpc.CallOption) (*ResponseFile, error) {
+	out := new(ResponseFile)
+	err := c.cc.Invoke(ctx, "/FileService/GetFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileServiceClient) GenerateFile(ctx context.Context, in *FileRequest, opts ...grpc.CallOption) (*ResponseName, error) {
+	out := new(ResponseName)
+	err := c.cc.Invoke(ctx, "/FileService/GenerateFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// FileServiceServer is the server API for FileService service.
+// All implementations must embed UnimplementedFileServiceServer
+// for forward compatibility
+type FileServiceServer interface {
+	CreateFile(context.Context, *UserFile) (*CreateFileResponse, error)
+	GetAllFiles(context.Context, *FileRequest) (*ResponseFile, error)
+	GetFile(context.Context, *FileRequest) (*ResponseFile, error)
+	GenerateFile(context.Context, *FileRequest) (*ResponseName, error)
+	mustEmbedUnimplementedFileServiceServer()
+}
+
+// UnimplementedFileServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedFileServiceServer struct {
+}
+
+func (UnimplementedFileServiceServer) CreateFile(context.Context, *UserFile) (*CreateFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFile not implemented")
+}
+func (UnimplementedFileServiceServer) GetAllFiles(context.Context, *FileRequest) (*ResponseFile, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllFiles not implemented")
+}
+func (UnimplementedFileServiceServer) GetFile(context.Context, *FileRequest) (*ResponseFile, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFile not implemented")
+}
+func (UnimplementedFileServiceServer) GenerateFile(context.Context, *FileRequest) (*ResponseName, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateFile not implemented")
+}
+func (UnimplementedFileServiceServer) mustEmbedUnimplementedFileServiceServer() {}
+
+// UnsafeFileServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FileServiceServer will
+// result in compilation errors.
+type UnsafeFileServiceServer interface {
+	mustEmbedUnimplementedFileServiceServer()
+}
+
+func RegisterFileServiceServer(s grpc.ServiceRegistrar, srv FileServiceServer) {
+	s.RegisterService(&FileService_ServiceDesc, srv)
+}
+
+func _FileService_CreateFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserFile)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServiceServer).CreateFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/FileService/CreateFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServiceServer).CreateFile(ctx, req.(*UserFile))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FileService_GetAllFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServiceServer).GetAllFiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/FileService/GetAllFiles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServiceServer).GetAllFiles(ctx, req.(*FileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FileService_GetFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServiceServer).GetFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/FileService/GetFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServiceServer).GetFile(ctx, req.(*FileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FileService_GenerateFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServiceServer).GenerateFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/FileService/GenerateFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServiceServer).GenerateFile(ctx, req.(*FileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// FileService_ServiceDesc is the grpc.ServiceDesc for FileService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var FileService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "FileService",
+	HandlerType: (*FileServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateFile",
+			Handler:    _FileService_CreateFile_Handler,
+		},
+		{
+			MethodName: "GetAllFiles",
+			Handler:    _FileService_GetAllFiles_Handler,
+		},
+		{
+			MethodName: "GetFile",
+			Handler:    _FileService_GetFile_Handler,
+		},
+		{
+			MethodName: "GenerateFile",
+			Handler:    _FileService_GenerateFile_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "auth.proto",
+}
+
+// StatServiceClient is the client API for StatService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type StatServiceClient interface {
+	GetStatistics(ctx context.Context, in *StatisticsRequest, opts ...grpc.CallOption) (*StatisticsResponse, error)
+}
+
+type statServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewStatServiceClient(cc grpc.ClientConnInterface) StatServiceClient {
+	return &statServiceClient{cc}
+}
+
+func (c *statServiceClient) GetStatistics(ctx context.Context, in *StatisticsRequest, opts ...grpc.CallOption) (*StatisticsResponse, error) {
+	out := new(StatisticsResponse)
+	err := c.cc.Invoke(ctx, "/StatService/GetStatistics", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// StatServiceServer is the server API for StatService service.
+// All implementations must embed UnimplementedStatServiceServer
+// for forward compatibility
+type StatServiceServer interface {
+	GetStatistics(context.Context, *StatisticsRequest) (*StatisticsResponse, error)
+	mustEmbedUnimplementedStatServiceServer()
+}
+
+// UnimplementedStatServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedStatServiceServer struct {
+}
+
+func (UnimplementedStatServiceServer) GetStatistics(context.Context, *StatisticsRequest) (*StatisticsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStatistics not implemented")
+}
+func (UnimplementedStatServiceServer) mustEmbedUnimplementedStatServiceServer() {}
+
+// UnsafeStatServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to StatServiceServer will
+// result in compilation errors.
+type UnsafeStatServiceServer interface {
+	mustEmbedUnimplementedStatServiceServer()
+}
+
+func RegisterStatServiceServer(s grpc.ServiceRegistrar, srv StatServiceServer) {
+	s.RegisterService(&StatService_ServiceDesc, srv)
+}
+
+func _StatService_GetStatistics_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StatisticsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatServiceServer).GetStatistics(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/StatService/GetStatistics",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatServiceServer).GetStatistics(ctx, req.(*StatisticsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// StatService_ServiceDesc is the grpc.ServiceDesc for StatService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var StatService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "StatService",
+	HandlerType: (*StatServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetStatistics",
+			Handler:    _StatService_GetStatistics_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

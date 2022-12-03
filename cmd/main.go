@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -13,11 +12,6 @@ import (
 	"github.com/khusainnov/auth-service/pkg/service"
 	"github.com/khusainnov/logging"
 )
-
-// TODO: регистрация пользователя
-// TODO: сделать docker-file и залить на сервер
-// TODO: написать Ильназу чтобы добавил клиента для отправки данных в бота
-// TODO: проверка регистрации через бота
 
 var (
 	logger = logging.GetLogger()
@@ -44,29 +38,16 @@ func main() {
 		logger.Errorf("cannot run postgres db, due to error: %s", err.Error())
 	}
 
-	// Redis DB Connect
-	logger.Infoln("connecting to redis")
-	rdb, err := driver.NewRedisDB(
-		driver.ConfigRedis{
-			// if you start with docker-compose, change from localhost to Getenv
-			Port:     fmt.Sprintf("%s:%s" /*os.Getenv("REDIS_NAME")*/, "localhost", os.Getenv("REDIS_PORT")),
-			Password: os.Getenv("REDIS_PASSWORD"),
-			DB:       0,
-		},
-		ctx,
-	)
-	if err != nil {
-		logger.Fatalf("cannot connect to redis, due to error: %s", err.Error())
-	}
-
 	//Initializing layers
-	repo := repository.NewRepository(db, rdb)
+	repo := repository.NewRepository(db)
 	services := service.NewService(repo)
 	authService := endpoint.NewAuthService(services)
+	fileService := endpoint.NewWorkService(services)
+	statisticsService := endpoint.NewStatisticsService(services)
 
 	//starting grpc server
 	logger.Infof("Starting server on port: %s", os.Getenv("PORT"))
-	if err = as.RunGRPC(os.Getenv("PORT"), authService); err != nil {
+	if err = as.RunGRPC(os.Getenv("PORT"), authService, fileService, statisticsService); err != nil {
 		logger.Errorf("Error due start the server: %s", err.Error())
 	}
 }

@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\"l\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07surname\x18\x03 \x01(\t\x12\x12\n\npatronymic\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x10\n\x08password\x18\x06 \x01(\t\"1\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\",\n\x0bResponseMsg\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t2y\n\x0b\x41uthService\x12#\n\nCreateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x12 \n\x07GetUser\x12\x0c.UserRequest\x1a\x05.User\"\x00\x12#\n\nUpdateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x42\nZ\x08./gen/pbb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\"l\n\x04User\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07surname\x18\x03 \x01(\t\x12\x12\n\npatronymic\x18\x04 \x01(\t\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x10\n\x08password\x18\x06 \x01(\t\"1\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"!\n\x0cResponseAuth\x12\x11\n\trole_name\x18\x01 \x01(\t\",\n\x0bResponseMsg\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\"!\n\rDeleteRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"1\n\x0e\x44\x65leteResponse\x12\x0e\n\x06status\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\"*\n\x08UserFile\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04\x66ile\x18\x02 \x01(\x0c\"\x1f\n\x0b\x46ileRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"3\n\x12\x43reateFileResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\">\n\x0cResponseFile\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x0e\n\x06\x63hunks\x18\x03 \x03(\x0c\"A\n\x0cResponseName\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07surname\x18\x02 \x01(\t\x12\x12\n\npatronymic\x18\x03 \x01(\t\"%\n\x11StatisticsRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"Y\n\x12StatisticsResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x03\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x11\n\tuser_numb\x18\x03 \x01(\x03\x12\x11\n\tfile_numb\x18\x04 \x01(\x03\x32\xe1\x01\n\x0b\x41uthService\x12#\n\nCreateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x12(\n\x07GetUser\x12\x0c.UserRequest\x1a\r.ResponseAuth\"\x00\x12#\n\nUpdateUser\x12\x05.User\x1a\x0c.ResponseMsg\"\x00\x12-\n\rResetPassword\x12\x0c.UserRequest\x1a\x0c.ResponseMsg\"\x00\x12/\n\nDeleteUser\x12\x0e.DeleteRequest\x1a\x0f.DeleteResponse\"\x00\x32\xc4\x01\n\x0b\x46ileService\x12.\n\nCreateFile\x12\t.UserFile\x1a\x13.CreateFileResponse\"\x00\x12,\n\x0bGetAllFiles\x12\x0c.FileRequest\x1a\r.ResponseFile\"\x00\x12(\n\x07GetFile\x12\x0c.FileRequest\x1a\r.ResponseFile\"\x00\x12-\n\x0cGenerateFile\x12\x0c.FileRequest\x1a\r.ResponseName\"\x00\x32I\n\x0bStatService\x12:\n\rGetStatistics\x12\x12.StatisticsRequest\x1a\x13.StatisticsResponse\"\x00\x42\nZ\x08./gen/pbb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'auth_pb2', globals())
@@ -25,8 +25,32 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _USER._serialized_end=122
   _USERREQUEST._serialized_start=124
   _USERREQUEST._serialized_end=173
-  _RESPONSEMSG._serialized_start=175
-  _RESPONSEMSG._serialized_end=219
-  _AUTHSERVICE._serialized_start=221
-  _AUTHSERVICE._serialized_end=342
+  _RESPONSEAUTH._serialized_start=175
+  _RESPONSEAUTH._serialized_end=208
+  _RESPONSEMSG._serialized_start=210
+  _RESPONSEMSG._serialized_end=254
+  _DELETEREQUEST._serialized_start=256
+  _DELETEREQUEST._serialized_end=289
+  _DELETERESPONSE._serialized_start=291
+  _DELETERESPONSE._serialized_end=340
+  _USERFILE._serialized_start=342
+  _USERFILE._serialized_end=384
+  _FILEREQUEST._serialized_start=386
+  _FILEREQUEST._serialized_end=417
+  _CREATEFILERESPONSE._serialized_start=419
+  _CREATEFILERESPONSE._serialized_end=470
+  _RESPONSEFILE._serialized_start=472
+  _RESPONSEFILE._serialized_end=534
+  _RESPONSENAME._serialized_start=536
+  _RESPONSENAME._serialized_end=601
+  _STATISTICSREQUEST._serialized_start=603
+  _STATISTICSREQUEST._serialized_end=640
+  _STATISTICSRESPONSE._serialized_start=642
+  _STATISTICSRESPONSE._serialized_end=731
+  _AUTHSERVICE._serialized_start=734
+  _AUTHSERVICE._serialized_end=959
+  _FILESERVICE._serialized_start=962
+  _FILESERVICE._serialized_end=1158
+  _STATSERVICE._serialized_start=1160
+  _STATSERVICE._serialized_end=1233
 # @@protoc_insertion_point(module_scope)
